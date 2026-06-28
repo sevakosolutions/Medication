@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Crystal Healing Meditation</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  AMBIENT PARTICLE CANVAS                                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  APP SHELL                                                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- ── HEADER ────────────────────────────────────────────── -->
+  <header id="appHeader">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-gem">✦</span>
+        <span class="logo-text">Crystal Healing</span>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn active" data-view="home">Home</button>
+        <button class="nav-btn" data-view="weekly">Weekly</button>
+        <button class="nav-btn" data-view="sessions">Sessions</button>
+        <button class="nav-btn" data-view="settings">Settings</button>
+      </nav>
+      <button id="menuToggle" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  VIEW: HOME                                               -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <main id="viewHome" class="view active">
+
+    <section class="hero">
+      <p class="hero-eyebrow">Daily Practice</p>
+      <h1 class="hero-title">Begin Your<br/><em>Healing Journey</em></h1>
+      <p class="hero-sub">Hold your crystals · Breathe · Set your intention</p>
+    </section>
+
+    <!-- AMBIENT MUSIC CONTROL -->
+    <div class="ambient-bar">
+      <span class="ambient-label">Ambient</span>
+      <div class="ambient-sounds" id="ambientSounds">
+        <button class="sound-chip active" data-sound="none">Silence</button>
+        <button class="sound-chip" data-sound="bowls">Singing Bowls</button>
+        <button class="sound-chip" data-sound="rain">Rain</button>
+        <button class="sound-chip" data-sound="forest">Forest</button>
+        <button class="sound-chip" data-sound="ocean">Ocean</button>
+        <button class="sound-chip" data-sound="om">OM Chant</button>
+      </div>
+      <div class="vol-wrap">
+        <span>🔈</span>
+        <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" />
+      </div>
+    </div>
+
+    <!-- DAILY SESSION CARDS -->
+    <section class="sessions-grid" id="dailySessions"></section>
+
+    <!-- COMMUTE KIT -->
+    <section class="commute-section">
+      <div class="commute-card" id="commuteCard">
+        <div class="commute-header">
+          <span class="commute-icon">🚆</span>
+          <div>
+            <h3>Office &amp; Train Commute Kit</h3>
+            <p>Carry your pouch · 5 slow breaths</p>
+          </div>
+          <button class="edit-btn" data-target="commute">✏️</button>
+        </div>
+        <div class="commute-crystals" id="commuteCrystals"></div>
+        <div class="commute-affirmations" id="commuteAffirmations"></div>
+        <button class="start-btn commute-start" id="startCommute">
+          <span>Begin Commute Practice</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  VIEW: WEEKLY                                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <main id="viewWeekly" class="view">
+    <section class="page-hero">
+      <h2>Weekly <em>Crystal Focus</em></h2>
+      <p>Each day carries its own intention</p>
+    </section>
+    <div class="weekly-grid" id="weeklyGrid"></div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  VIEW: SESSIONS (manage / add)                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <main id="viewSessions" class="view">
+    <section class="page-hero">
+      <h2>Manage <em>Sessions</em></h2>
+      <p>Edit, reorder, or add your own healing sessions</p>
+    </section>
+    <div class="manage-list" id="manageList"></div>
+    <button class="add-session-btn" id="addSessionBtn">+ Add New Session</button>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  VIEW: SETTINGS                                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <main id="viewSettings" class="view">
+    <section class="page-hero">
+      <h2>Settings &amp; <em>Voice</em></h2>
+    </section>
+
+    <div class="settings-card">
+      <h3>Text-to-Speech Voice</h3>
+      <label>Voice
+        <select id="voiceSelect"></select>
+      </label>
+      <label>Speed
+        <input type="range" id="speechRate" min="0.5" max="1.5" step="0.1" value="0.85" />
+        <span id="speechRateVal">0.85×</span>
+      </label>
+      <label>Pitch
+        <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0" />
+        <span id="speechPitchVal">1.0</span>
+      </label>
+      <button class="test-btn" id="testVoice">▶ Test Voice</button>
+    </div>
+
+    <div class="settings-card">
+      <h3>Custom Voice Recording</h3>
+      <p class="settings-hint">Upload your own recorded affirmations (MP3 or WAV). They'll replace the TTS voice for that session.</p>
+      <label class="file-upload-label">
+        <input type="file" id="customAudioUpload" accept="audio/*" multiple />
+        <span>📁 Choose Audio Files</span>
+      </label>
+      <div id="uploadedFiles"></div>
+    </div>
+
+    <div class="settings-card">
+      <h3>Display</h3>
+      <label class="toggle-label">
+        <span>Dark Mode</span>
+        <input type="checkbox" id="darkModeToggle" checked />
+        <span class="toggle-track"></span>
+      </label>
+      <label class="toggle-label">
+        <span>Auto-advance sessions</span>
+        <input type="checkbox" id="autoAdvance" />
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <div class="settings-card">
+      <h3>Data</h3>
+      <button class="outline-btn" id="exportData">⬇ Export Sessions JSON</button>
+      <button class="outline-btn" id="importDataBtn">⬆ Import Sessions JSON</button>
+      <input type="file" id="importDataFile" accept=".json" style="display:none" />
+      <button class="outline-btn danger" id="resetData">↺ Reset to Defaults</button>
+    </div>
+  </main>
+
+</div><!-- /#app -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  MODAL: SESSION PLAYER                                        -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="playerModal" class="modal hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel">
+
+    <button class="modal-close" id="closePlayer">✕</button>
+
+    <div class="player-crystal-row" id="playerCrystals"></div>
+
+    <h2 class="player-title" id="playerTitle"></h2>
+    <p class="player-subtitle" id="playerSubtitle"></p>
+
+    <!-- TIMER RING -->
+    <div class="timer-ring-wrap">
+      <svg class="timer-ring" viewBox="0 0 200 200">
+        <circle class="ring-track" cx="100" cy="100" r="88"/>
+        <circle class="ring-fill" id="ringFill" cx="100" cy="100" r="88"/>
+      </svg>
+      <div class="timer-center">
+        <span class="timer-display" id="timerDisplay">00:00</span>
+        <span class="timer-label" id="timerLabel">remaining</span>
+      </div>
+    </div>
+
+    <!-- AFFIRMATION -->
+    <div class="affirmation-box">
+      <p class="affirmation-count" id="affirmCount"></p>
+      <p class="affirmation-text" id="affirmText"></p>
+    </div>
+
+    <!-- VISUALIZE -->
+    <div class="visualize-box" id="visualizeBox"></div>
+
+    <!-- CONTROLS -->
+    <div class="player-controls">
+      <button class="ctrl-btn" id="prevAffirm" title="Previous">◀</button>
+      <button class="ctrl-btn primary" id="playPause" title="Play / Pause">▶</button>
+      <button class="ctrl-btn" id="nextAffirm" title="Next">▶▶</button>
+      <button class="ctrl-btn" id="repeatToggle" title="Repeat">↺</button>
+    </div>
+
+    <div class="player-progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-label" id="progressLabel"></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  MODAL: EDIT SESSION                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="editModal" class="modal hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel edit-panel">
+    <button class="modal-close" id="closeEdit">✕</button>
+    <h2 class="edit-title">Edit Session</h2>
+
+    <label>Session Name
+      <input type="text" id="editName" placeholder="e.g. Morning Ritual" />
+    </label>
+    <label>Emoji Icon
+      <input type="text" id="editEmoji" placeholder="🌞" maxlength="4" />
+    </label>
+    <label>Duration (minutes)
+      <input type="number" id="editDuration" min="1" max="60" placeholder="10" />
+    </label>
+    <label>Purpose / Subtitle
+      <input type="text" id="editPurpose" placeholder="Digestion · Energy · Focus" />
+    </label>
+    <label>Crystals (one per line, format: emoji name — quantity)
+      <textarea id="editCrystals" rows="4" placeholder="🔹 Clear Quartz — 8 chips&#10;🟡 Citrine — 7 chips"></textarea>
+    </label>
+    <label>Visualize (describe the light/image)
+      <input type="text" id="editVisualize" placeholder="A warm golden light filling your abdomen…" />
+    </label>
+    <label>Affirmations (one per line)
+      <textarea id="editAffirmations" rows="8" placeholder="My body is healing.&#10;I am strong and vital."></textarea>
+    </label>
+    <label>Ambient Sound
+      <select id="editSound">
+        <option value="none">Silence</option>
+        <option value="bowls">Singing Bowls</option>
+        <option value="rain">Rain</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+        <option value="om">OM Chant</option>
+      </select>
+    </label>
+
+    <div class="edit-actions">
+      <button class="outline-btn danger" id="deleteSession">Delete Session</button>
+      <button class="save-btn" id="saveSession">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  MODAL: CONFIRM                                               -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="confirmModal" class="modal hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel confirm-panel">
+    <p id="confirmMsg">Are you sure?</p>
+    <div class="confirm-actions">
+      <button class="outline-btn" id="confirmNo">Cancel</button>
+      <button class="save-btn danger" id="confirmYes">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/player.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
